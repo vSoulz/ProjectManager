@@ -2,6 +2,8 @@ package com.example.controller;
 
 import javax.validation.Valid;
 
+import com.example.model.Role;
+import com.example.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,11 +16,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.model.User;
 import com.example.service.UserService;
 
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
+
 @Controller
 public class LoginController {
 	
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private RoleRepository roleRepository;
 
 	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
 	public ModelAndView login(){
@@ -30,8 +38,17 @@ public class LoginController {
 	
 	@RequestMapping(value="/registration", method = RequestMethod.GET)
 	public ModelAndView registration(){
+
 		ModelAndView modelAndView = new ModelAndView();
 		User user = new User();
+		try{
+			Set<Role> defaultRoles = new HashSet<>();
+			Role admin = new Role("ADMIN");
+			defaultRoles.add(admin);
+			user.setRoles(defaultRoles);
+			roleRepository.save(admin);
+		}
+		catch (Exception sqle){};
 		modelAndView.addObject("user", user);
 		modelAndView.setViewName("registration");
 		return modelAndView;
@@ -49,6 +66,11 @@ public class LoginController {
 		if (bindingResult.hasErrors()) {
 			modelAndView.setViewName("registration");
 		} else {
+			/*Set<Role> defaultRoles = new HashSet<>();
+			Role admin = new Role("ADMIN");
+			defaultRoles.add(admin);
+			roleRepository.save(admin);
+			user.setRoles(defaultRoles);*/
 			userService.saveUser(user);
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());
