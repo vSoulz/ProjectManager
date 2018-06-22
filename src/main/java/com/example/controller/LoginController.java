@@ -5,8 +5,6 @@ import javax.validation.Valid;
 import com.example.model.Role;
 import com.example.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,9 +42,13 @@ public class LoginController {
 		try{
 			Set<Role> defaultRoles = new HashSet<>();
 			Role admin = new Role("ADMIN");
+			Role usr = new Role("USER");
 			defaultRoles.add(admin);
+			defaultRoles.add(usr);
+			roleRepository.save(usr);
 			user.setRoles(defaultRoles);
 			roleRepository.save(admin);
+
 		}
 		catch (Exception sqle){};
 		modelAndView.addObject("user", user);
@@ -66,11 +68,6 @@ public class LoginController {
 		if (bindingResult.hasErrors()) {
 			modelAndView.setViewName("registration");
 		} else {
-			/*Set<Role> defaultRoles = new HashSet<>();
-			Role admin = new Role("ADMIN");
-			defaultRoles.add(admin);
-			roleRepository.save(admin);
-			user.setRoles(defaultRoles);*/
 			userService.saveUser(user);
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());
@@ -80,7 +77,7 @@ public class LoginController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value="/admin/home", method = RequestMethod.GET)
+	/*@RequestMapping(value="/admin/home", method = RequestMethod.GET)
 	public ModelAndView home(){
 		ModelAndView modelAndView = new ModelAndView();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -89,7 +86,7 @@ public class LoginController {
 		modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
 		modelAndView.setViewName("admin/home");
 		return modelAndView;
-	}
+	}*/
 	
 
 }
