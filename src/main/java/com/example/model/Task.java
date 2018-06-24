@@ -1,5 +1,8 @@
 package com.example.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,18 +20,20 @@ public class Task {
 
     private boolean finished = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_tasks", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_project")
+    @JoinColumn(name = "fk_project", nullable = true)
+
     private Project project;
 
-    public Task(String title, String content, boolean finished) {
+    public Task(String title, String content, boolean finished, User user) {
         this.title = title;
         this.content = content;
         this.finished = finished;
+        this.user = user;
     }
 
     public Task(){

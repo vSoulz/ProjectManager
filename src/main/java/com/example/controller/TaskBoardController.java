@@ -8,6 +8,7 @@ import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,17 +27,22 @@ public class TaskBoardController {
     UserRepository userRepository;
 
     @RequestMapping(value="/taskboard", method = RequestMethod.GET)
-    public List<Task> mainPage(){
+    public List<Task> TaskBoardWeb(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByEmail(auth.getName());
         List<Task> tasks = new ArrayList<>();
-        tasks = user.getTasks();
-        tasks.add(new Task("Projekt","Projekt na pp",false));
-        tasks.add(new Task("Projekt2","Projekt na hd",false));
-        user.setTasks(tasks);
+        tasks.add(new Task("Projekt","Projekt na pp",false, user));
+        tasks.add(new Task("Projekt2","Projekt na hd",false, user));
         taskRepository.save(tasks);
         userRepository.save(user);
-        return user.getTasks();
+        return taskRepository.findByUser(userRepository.findByEmail(auth.getName()));
     }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String TaskBoardMove(@RequestBody String redirect){
+        return "localhost:8080/" + redirect;
+    }
+
+
 
 }

@@ -43,26 +43,20 @@ public class User {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
-	@OneToMany(cascade = { CascadeType.ALL })
-	@JoinTable(
-			name = "user_tasks",
 
-			joinColumns = { @JoinColumn(name = "user_id") },
-			inverseJoinColumns = { @JoinColumn(name = "task_id") }
-	)
-	private List<Task> tasks = new ArrayList<>();
+	//private List<Task> tasks = new ArrayList<>();
 
 	@ManyToMany(cascade = { CascadeType.ALL })
 	private List<Team> teams = new ArrayList<>();
 
 
-	public List<Task> getTasks() {
+	/*public List<Task> getTasks() {
 		return tasks;
 	}
 
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
-	}
+	}*/
 
 	public List<Team> getTeams() {
 		return teams;
