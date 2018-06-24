@@ -43,6 +43,12 @@ public class TaskBoardController {
         return "localhost:8080/" + redirect;
     }
 
+    @RequestMapping(method = RequestMethod.POST)
+    public void TaskBoardAdd(@RequestBody Task task, String mail){
+        task.setUser(userRepository.findByEmail(mail));
+        taskRepository.save(task);
+    }
+
 
 
 }

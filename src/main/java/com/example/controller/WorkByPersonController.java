@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WorkByPersonController {
 
 
-    @RequestMapping(value="workbyperson", method = RequestMethod.GET)
+    @RequestMapping(value="/workbyperson", method = RequestMethod.GET)
     public String WorkByPersonWeb(){
 
         return "xd";

@@ -44,8 +44,6 @@ public class User {
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 
-	//private List<Task> tasks = new ArrayList<>();
-
 	@ManyToMany(cascade = { CascadeType.ALL })
 	private List<Team> teams = new ArrayList<>();
 
