@@ -122,4 +122,9 @@ public class User {
 		this.roles = roles;
 	}
 
+	public String toTaskString() {
+		//return { "userId": 1, "userName": "bill", "tasks": [ { "userId": 1,";
+		return "{ \"userId\":"+ this.getId()+ ", \"userName\": \"" + this.getName() + "\", \"tasks\": [ { \"userId\": "+ this.getId();
+		}
+
 }
